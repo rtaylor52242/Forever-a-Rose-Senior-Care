@@ -1,8 +1,10 @@
-
 import React from 'react';
-import { TESTIMONIALS } from '../constants';
 import type { Testimonial } from '../types';
 import { Quote } from 'lucide-react';
+
+interface TestimonialsPageProps {
+  testimonials: Testimonial[];
+}
 
 const TestimonialCard: React.FC<{ testimonial: Testimonial }> = ({ testimonial }) => (
   <div className="bg-white rounded-lg shadow-lg p-8 border-l-4 border-brand-rose-gold">
@@ -12,7 +14,7 @@ const TestimonialCard: React.FC<{ testimonial: Testimonial }> = ({ testimonial }
   </div>
 );
 
-const TestimonialsPage: React.FC = () => {
+const TestimonialsPage: React.FC<TestimonialsPageProps> = ({ testimonials }) => {
   return (
     <div className="py-20 bg-brand-blue/5">
       <div className="container mx-auto px-6">
@@ -26,7 +28,7 @@ const TestimonialsPage: React.FC = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {TESTIMONIALS.map((testimonial, index) => (
+          {testimonials.map((testimonial, index) => (
             <TestimonialCard key={index} testimonial={testimonial} />
           ))}
         </div>

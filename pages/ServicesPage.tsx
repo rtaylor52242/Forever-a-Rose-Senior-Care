@@ -1,7 +1,9 @@
-
 import React from 'react';
-import { SERVICES } from '../constants';
 import type { Service } from '../types';
+
+interface ServicesPageProps {
+  services: Service[];
+}
 
 const ServiceCard: React.FC<{ service: Service }> = ({ service }) => (
   <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-8 transition-shadow hover:shadow-xl">
@@ -17,7 +19,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => (
   </div>
 );
 
-const ServicesPage: React.FC = () => {
+const ServicesPage: React.FC<ServicesPageProps> = ({ services }) => {
   return (
     <div className="py-20 bg-brand-blue/5">
       <div className="container mx-auto px-6">
@@ -31,7 +33,7 @@ const ServicesPage: React.FC = () => {
         </div>
         
         <div className="space-y-10">
-          {SERVICES.map((service) => (
+          {services.map((service) => (
             <ServiceCard key={service.title} service={service} />
           ))}
         </div>

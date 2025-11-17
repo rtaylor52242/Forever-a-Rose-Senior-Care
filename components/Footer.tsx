@@ -1,10 +1,14 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { NAV_LINKS, SOCIAL_LINKS } from '../constants';
 import { Flower2 } from 'lucide-react';
+import type { ContactInfo } from '../types';
 
-const Footer: React.FC = () => {
+interface FooterProps {
+  contactInfo: ContactInfo;
+}
+
+const Footer: React.FC<FooterProps> = ({ contactInfo }) => {
   return (
     <footer className="bg-brand-gray text-brand-cream">
       <div className="container mx-auto px-6 py-12">
@@ -31,9 +35,9 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="font-bold font-serif text-lg text-white">Contact Us</h3>
             <ul className="mt-4 space-y-2 text-brand-blue">
-              <li>Phone: <a href="tel:919-626-1260" className="hover:text-brand-rose-gold transition-colors">919-626-1260</a></li>
-              <li>Email: <a href="mailto:ForeveraRose.FamilyServices@gmail.com" className="hover:text-brand-rose-gold transition-colors">ForeveraRose.FamilyServices@gmail.com</a></li>
-              <li>Clayton, NC & Surrounding Areas</li>
+              <li>Phone: <a href={`tel:${contactInfo.phone}`} className="hover:text-brand-rose-gold transition-colors">{contactInfo.phone}</a></li>
+              <li>Email: <a href={`mailto:${contactInfo.email}`} className="hover:text-brand-rose-gold transition-colors">{contactInfo.email}</a></li>
+              <li>{contactInfo.address}</li>
             </ul>
           </div>
           
@@ -51,6 +55,9 @@ const Footer: React.FC = () => {
 
         <div className="mt-12 border-t border-brand-blue/30 pt-8 text-center text-brand-blue text-sm">
           <p>&copy; {new Date().getFullYear()} Forever a Rose Senior Care. All Rights Reserved.</p>
+           <div className="mt-2">
+            <Link to="/admin" className="text-xs hover:text-white transition-colors">Admin</Link>
+          </div>
         </div>
       </div>
     </footer>

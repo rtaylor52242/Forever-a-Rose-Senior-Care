@@ -1,6 +1,5 @@
-
-import React, { useState, useEffect } from 'react';
-import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -9,9 +8,27 @@ import ServicesPage from './pages/ServicesPage';
 import BlogPage from './pages/BlogPage';
 import TestimonialsPage from './pages/TestimonialsPage';
 import ContactPage from './pages/ContactPage';
+import AdminPage from './pages/AdminPage';
 import ScrollToTop from './components/ScrollToTop';
+import { 
+  HOME_MISSION,
+  ABOUT_CONTENT, 
+  SERVICES, 
+  BLOG_POSTS, 
+  TESTIMONIALS, 
+  CONTACT_INFO 
+} from './data';
+import type { AboutContent, Service, BlogPost, Testimonial, ContactInfo } from './types';
+
 
 function App() {
+  const [homeMission, setHomeMission] = useState<string>(HOME_MISSION);
+  const [aboutContent, setAboutContent] = useState<AboutContent>(ABOUT_CONTENT);
+  const [services, setServices] = useState<Service[]>(SERVICES);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>(BLOG_POSTS);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(TESTIMONIALS);
+  const [contactInfo, setContactInfo] = useState<ContactInfo>(CONTACT_INFO);
+
   return (
     <HashRouter>
       <ScrollToTop />
@@ -19,15 +36,31 @@ function App() {
         <Header />
         <main className="flex-grow">
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/services" element={<ServicesPage />} />
-            <Route path="/blog" element={<BlogPage />} />
-            <Route path="/testimonials" element={<TestimonialsPage />} />
-            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/" element={<HomePage missionStatement={homeMission} services={services} testimonials={testimonials} />} />
+            <Route path="/about" element={<AboutPage content={aboutContent} />} />
+            <Route path="/services" element={<ServicesPage services={services} />} />
+            <Route path="/blog" element={<BlogPage posts={blogPosts} />} />
+            <Route path="/testimonials" element={<TestimonialsPage testimonials={testimonials} />} />
+            <Route path="/contact" element={<ContactPage contactInfo={contactInfo} />} />
+            <Route path="/admin" element={
+              <AdminPage
+                homeMission={homeMission}
+                setHomeMission={setHomeMission}
+                aboutContent={aboutContent}
+                setAboutContent={setAboutContent}
+                services={services}
+                setServices={setServices}
+                blogPosts={blogPosts}
+                setBlogPosts={setBlogPosts}
+                testimonials={testimonials}
+                setTestimonials={setTestimonials}
+                contactInfo={contactInfo}
+                setContactInfo={setContactInfo}
+              />
+            } />
           </Routes>
         </main>
-        <Footer />
+        <Footer contactInfo={contactInfo} />
       </div>
     </HashRouter>
   );

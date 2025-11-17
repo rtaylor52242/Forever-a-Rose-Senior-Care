@@ -1,8 +1,10 @@
-
 import React from 'react';
-import { BLOG_POSTS } from '../constants';
 import { Link } from 'react-router-dom';
 import type { BlogPost } from '../types';
+
+interface BlogPageProps {
+  posts: BlogPost[];
+}
 
 const BlogPostCard: React.FC<{ post: BlogPost }> = ({ post }) => (
   <div className="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform hover:-translate-y-2">
@@ -17,7 +19,7 @@ const BlogPostCard: React.FC<{ post: BlogPost }> = ({ post }) => (
   </div>
 );
 
-const BlogPage: React.FC = () => {
+const BlogPage: React.FC<BlogPageProps> = ({ posts }) => {
   return (
     <div className="py-20 bg-brand-cream">
       <div className="container mx-auto px-6">
@@ -31,7 +33,7 @@ const BlogPage: React.FC = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {BLOG_POSTS.map((post) => (
+          {posts.map((post) => (
             <BlogPostCard key={post.title} post={post} />
           ))}
         </div>

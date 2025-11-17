@@ -1,8 +1,12 @@
-
 import React, { useState } from 'react';
 import { Phone, Mail, Clock, MapPin } from 'lucide-react';
+import type { ContactInfo } from '../types';
 
-const ContactPage: React.FC = () => {
+interface ContactPageProps {
+    contactInfo: ContactInfo;
+}
+
+const ContactPage: React.FC<ContactPageProps> = ({ contactInfo }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -80,29 +84,29 @@ const ContactPage: React.FC = () => {
                         <Phone className="w-6 h-6 text-brand-rose-gold mt-1"/>
                         <div>
                             <h4 className="font-bold">Phone</h4>
-                            <a href="tel:919-626-1260" className="text-brand-gray hover:text-brand-burgundy">919-626-1260</a>
+                            <a href={`tel:${contactInfo.phone}`} className="text-brand-gray hover:text-brand-burgundy">{contactInfo.phone}</a>
                         </div>
                      </div>
                      <div className="flex items-start space-x-4">
                         <Mail className="w-6 h-6 text-brand-rose-gold mt-1"/>
                         <div>
                             <h4 className="font-bold">Email</h4>
-                            <a href="mailto:ForeveraRose.FamilyServices@gmail.com" className="text-brand-gray hover:text-brand-burgundy">ForeveraRose.FamilyServices@gmail.com</a>
+                            <a href={`mailto:${contactInfo.email}`} className="text-brand-gray hover:text-brand-burgundy">{contactInfo.email}</a>
                         </div>
                      </div>
                      <div className="flex items-start space-x-4">
                         <Clock className="w-6 h-6 text-brand-rose-gold mt-1"/>
                         <div>
                             <h4 className="font-bold">Business Hours</h4>
-                            <p className="text-brand-gray">Monday - Friday, 9:00 AM - 5:00 PM</p>
-                            <p className="text-sm text-brand-gray">(Flexible for urgent care needs)</p>
+                            <p className="text-brand-gray">{contactInfo.hours}</p>
+                            <p className="text-sm text-brand-gray">{contactInfo.hoursNote}</p>
                         </div>
                      </div>
                       <div className="flex items-start space-x-4">
                         <MapPin className="w-6 h-6 text-brand-rose-gold mt-1"/>
                         <div>
                             <h4 className="font-bold">Service Area</h4>
-                            <p className="text-brand-gray">Clayton, NC and surrounding areas</p>
+                            <p className="text-brand-gray">{contactInfo.address}</p>
                         </div>
                      </div>
                 </div>

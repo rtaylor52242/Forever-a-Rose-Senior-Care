@@ -1,4 +1,3 @@
-
 import { LucideIcon } from 'lucide-react';
 
 export interface Service {
@@ -21,4 +20,18 @@ export interface Testimonial {
 export interface NavLink {
   name: string;
   path: string;
+}
+
+export interface AboutContent {
+  story: string[];
+  mission: string;
+  vision: string;
+}
+
+export interface ContactInfo {
+  phone: string;
+  email: string;
+  address: string;
+  hours: string;
+  hoursNote: string;
 }

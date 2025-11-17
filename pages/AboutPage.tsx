@@ -1,7 +1,11 @@
-
 import React from 'react';
+import type { AboutContent } from '../types';
 
-const AboutPage: React.FC = () => {
+interface AboutPageProps {
+  content: AboutContent;
+}
+
+const AboutPage: React.FC<AboutPageProps> = ({ content }) => {
   return (
     <div className="py-20 bg-white">
       <div className="container mx-auto px-6">
@@ -17,22 +21,19 @@ const AboutPage: React.FC = () => {
             />
           </div>
           <div className="md:col-span-3 space-y-6 text-lg text-brand-gray">
-            <p>
-              Welcome to Forever a Rose Senior Care, founded by Renee Drummond, a dedicated and passionate Certified Nursing Assistant (CNA). With years of hands-on experience in various healthcare settings, Renee witnessed a need for more personalized, dignified, and compassionate care that truly honors the individual. She built this service on the belief that every senior deserves to live with comfort, joy, and the highest quality of life, all within the familiar surroundings of their own home.
-            </p>
-            <p>
-              Renee's extensive background as a CNA is not just a qualification; it's the heart of our company. It ensures that all care is provided with a professional, knowledgeable, and empathetic touch. We don't just see clients; we see family.
-            </p>
+            {content.story.map((paragraph, index) => (
+              <p key={index}>{paragraph}</p>
+            ))}
             <div className="bg-brand-cream p-6 rounded-lg border-l-4 border-brand-rose-gold">
               <h3 className="text-2xl font-serif font-bold text-brand-burgundy">Our Mission</h3>
               <p className="mt-2 italic">
-                To provide premium, compassionate, and personalized in-home senior care that enhances the quality of life for clients and peace of mind for families.
+                {content.mission}
               </p>
             </div>
             <div className="bg-brand-cream p-6 rounded-lg border-l-4 border-brand-rose-gold">
               <h3 className="text-2xl font-serif font-bold text-brand-burgundy">Our Vision</h3>
               <p className="mt-2 italic">
-                To become the most trusted and sought-after luxury senior care provider in Clayton and the surrounding North Carolina areas.
+                {content.vision}
               </p>
             </div>
           </div>

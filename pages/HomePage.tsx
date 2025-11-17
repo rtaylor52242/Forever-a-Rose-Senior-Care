@@ -1,19 +1,25 @@
-
 import React, { useState, useEffect } from 'react';
 import Button from '../components/ui/Button';
-import { SERVICES, TESTIMONIALS } from '../constants';
 import { Link } from 'react-router-dom';
 import { Quote } from 'lucide-react';
+import type { Service, Testimonial } from '../types';
 
-const HomePage: React.FC = () => {
+interface HomePageProps {
+  missionStatement: string;
+  services: Service[];
+  testimonials: Testimonial[];
+}
+
+const HomePage: React.FC<HomePageProps> = ({ missionStatement, services, testimonials }) => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
   useEffect(() => {
+    if (testimonials.length === 0) return;
     const timer = setInterval(() => {
-      setCurrentTestimonial((prev) => (prev + 1) % TESTIMONIALS.length);
+      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [testimonials]);
 
   return (
     <div className="space-y-24 pb-24">
@@ -38,7 +44,7 @@ const HomePage: React.FC = () => {
       <section className="container mx-auto px-6 text-center">
         <h2 className="text-3xl md:text-4xl font-serif font-bold text-brand-burgundy">Our Mission</h2>
         <p className="mt-4 max-w-3xl mx-auto text-lg text-brand-gray">
-          Forever a Rose Senior Care is dedicated to providing premium, compassionate, and personalized in-home senior care that enhances the quality of life for clients and peace of mind for families.
+          {missionStatement}
         </p>
       </section>
 
@@ -46,7 +52,7 @@ const HomePage: React.FC = () => {
       <section className="container mx-auto px-6">
         <h2 className="text-3xl md:text-4xl font-serif font-bold text-brand-burgundy text-center">Our Core Services</h2>
         <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {SERVICES.slice(0, 6).map((service) => (
+          {services.slice(0, 6).map((service) => (
             <div key={service.title} className="bg-white p-8 rounded-lg shadow-lg text-center transform transition-transform hover:-translate-y-2">
               <div className="inline-block p-4 bg-brand-rose-gold/20 rounded-full">
                  <service.icon className="w-12 h-12 text-brand-burgundy" />
@@ -64,7 +70,7 @@ const HomePage: React.FC = () => {
         <div className="container mx-auto px-6 text-center">
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-brand-burgundy">What Our Families Say</h2>
             <div className="relative mt-8 max-w-3xl mx-auto min-h-[200px]">
-              {TESTIMONIALS.map((testimonial, index) => (
+              {testimonials.map((testimonial, index) => (
                 <div key={index} className={`transition-opacity duration-1000 absolute w-full ${index === currentTestimonial ? 'opacity-100' : 'opacity-0'}`}>
                   <Quote className="w-12 h-12 text-brand-rose-gold mx-auto" />
                   <p className="mt-4 text-xl italic text-brand-gray">"{testimonial.quote}"</p>
