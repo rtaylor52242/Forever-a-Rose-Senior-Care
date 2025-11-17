@@ -9,7 +9,22 @@ export const ABOUT_CONTENT: AboutContent = {
     "Renee's extensive background as a CNA is not just a qualification; it's the heart of our company. It ensures that all care is provided with a professional, knowledgeable, and empathetic touch. We don't just see clients; we see family."
   ],
   mission: "To provide premium, compassionate, and personalized in-home senior care that enhances the quality of life for clients and peace of mind for families.",
-  vision: "To become the most trusted and sought-after luxury senior care provider in Clayton and the surrounding North Carolina areas."
+  vision: "To become the most trusted and sought-after luxury senior care provider in Clayton and the surrounding North Carolina areas.",
+  image: "https://picsum.photos/600/800?image=1027",
+  coreValues: [
+    {
+      title: 'Dignity',
+      description: 'We treat every client with the utmost respect, honoring their life experiences and personal preferences.'
+    },
+    {
+      title: 'Comfort',
+      description: 'We strive to create a safe, nurturing, and comfortable environment in the place our clients call home.'
+    },
+    {
+      title: 'Personalized Attention',
+      description: 'We believe in care that is as unique as the individual, offering tailored plans and a unique concierge approach.'
+    }
+  ]
 };
 
 export const SERVICES: Service[] = [

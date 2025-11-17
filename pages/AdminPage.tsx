@@ -78,8 +78,10 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
         setter(newItems);
     };
 
-    const handleItemRemove = (setter, items, indexToRemove) => {
-        setter(items.filter((_, index) => index !== indexToRemove));
+    const handleItemRemove = (setter, items, indexToRemove, itemName = 'item') => {
+        if (window.confirm(`Are you sure you want to delete this ${itemName}? This action cannot be undone.`)) {
+            setter(items.filter((_, index) => index !== indexToRemove));
+        }
     };
 
     const handleAddService = () => {
@@ -127,6 +129,25 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
             };
             reader.readAsDataURL(file);
         }
+    };
+
+    const handleAboutImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                if (event.target?.result) {
+                    setLocalAbout({ ...localAbout, image: event.target.result as string });
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+    
+    const handleCoreValueChange = (index: number, field: 'title' | 'description', value: string) => {
+        const newCoreValues = [...localAbout.coreValues];
+        newCoreValues[index] = { ...newCoreValues[index], [field]: value };
+        setLocalAbout({ ...localAbout, coreValues: newCoreValues });
     };
 
     const handleLogin = (e: React.FormEvent) => {
@@ -201,6 +222,18 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
 
             {/* About Page */}
             <AdminSection title="About Us Page" onSave={() => props.setAboutContent(localAbout)}>
+                <div className="mb-4">
+                    <label className="block text-sm font-bold text-brand-gray mb-2">About Page Image</label>
+                    <img src={localAbout.image} alt="About page preview" className="w-full h-auto object-cover rounded-md mb-4 max-h-64 border"/>
+                    
+                    <label className="block text-sm font-bold text-brand-gray mb-2">Upload New Image</label>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleAboutImageUpload}
+                        className="w-full text-sm text-brand-gray file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand-rose-gold/20 file:text-brand-burgundy hover:file:bg-brand-rose-gold/40 cursor-pointer"
+                    />
+                </div>
                 <AdminTextarea 
                     label="Story (Paragraph 1)"
                     value={localAbout.story[0]}
@@ -221,6 +254,21 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                     value={localAbout.vision}
                     onChange={(e) => setLocalAbout({...localAbout, vision: e.target.value})}
                 />
+                <h3 className="text-xl font-serif text-brand-burgundy mt-8 mb-4 border-t pt-4">Core Values</h3>
+                {localAbout.coreValues.map((value, index) => (
+                    <div key={index} className="mb-4 p-4 border rounded-md">
+                        <AdminInput
+                            label={`Value ${index + 1} Title`}
+                            value={value.title}
+                            onChange={(e) => handleCoreValueChange(index, 'title', e.target.value)}
+                        />
+                        <AdminTextarea
+                            label={`Value ${index + 1} Description`}
+                            value={value.description}
+                            onChange={(e) => handleCoreValueChange(index, 'description', e.target.value)}
+                        />
+                    </div>
+                ))}
             </AdminSection>
 
             {/* Services */}
@@ -228,7 +276,7 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                {localServices.map((service, index) => (
                    <div key={index} className="mb-6 p-4 border rounded-md relative">
                        <button
-                           onClick={() => handleItemRemove(setLocalServices, localServices, index)}
+                           onClick={() => handleItemRemove(setLocalServices, localServices, index, 'service')}
                            className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 w-7 h-7 flex items-center justify-center hover:bg-red-600 transition-colors text-xs font-bold"
                            aria-label="Remove Service"
                        >
@@ -260,7 +308,7 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                {localBlogPosts.map((post, index) => (
                    <div key={index} className="mb-6 p-4 border rounded-md relative">
                        <button
-                           onClick={() => handleItemRemove(setLocalBlogPosts, localBlogPosts, index)}
+                           onClick={() => handleItemRemove(setLocalBlogPosts, localBlogPosts, index, 'blog post')}
                            className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 w-7 h-7 flex items-center justify-center hover:bg-red-600 transition-colors text-xs font-bold"
                            aria-label="Remove Blog Post"
                        >
@@ -303,7 +351,7 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                {localTestimonials.map((testimonial, index) => (
                    <div key={index} className="mb-6 p-4 border rounded-md relative">
                         <button
-                           onClick={() => handleItemRemove(setLocalTestimonials, localTestimonials, index)}
+                           onClick={() => handleItemRemove(setLocalTestimonials, localTestimonials, index, 'testimonial')}
                            className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 w-7 h-7 flex items-center justify-center hover:bg-red-600 transition-colors text-xs font-bold"
                            aria-label="Remove Testimonial"
                        >

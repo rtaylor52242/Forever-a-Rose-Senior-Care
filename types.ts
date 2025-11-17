@@ -23,10 +23,17 @@ export interface NavLink {
   path: string;
 }
 
+export interface CoreValue {
+  title: string;
+  description: string;
+}
+
 export interface AboutContent {
   story: string[];
   mission: string;
   vision: string;
+  image: string;
+  coreValues: CoreValue[];
 }
 
 export interface SocialLink {

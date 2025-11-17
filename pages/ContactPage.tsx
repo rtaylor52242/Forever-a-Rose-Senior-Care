@@ -53,7 +53,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ contactInfo }) => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div className="bg-brand-cream p-8 rounded-lg shadow-lg">
-                <h2 className="text-3xl font-serif text-brand-burgundy mb-6">Contact Form</h2>
+                <h2 className="text-3xl font-serif text-brand-burgundy mb-2">Contact Form</h2>
                 {submitted ? (
                      <div className="text-center p-8 bg-green-100 text-green-800 rounded-lg">
                         <h3 className="text-2xl font-bold">Thank You!</h3>
@@ -67,6 +67,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ contactInfo }) => {
                      </div>
                 ) : (
                     <form onSubmit={handleSubmit} className="space-y-6">
+                        <p className="text-sm text-brand-gray mb-4">* Indicates a required field</p>
                         <div className="grid grid-cols-4 gap-6">
                             <div className="col-span-1">
                                 <label htmlFor="salutation" className="block text-brand-gray font-bold mb-2">Salutation</label>
@@ -75,7 +76,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ contactInfo }) => {
                                     name="salutation" 
                                     value={formData.salutation} 
                                     onChange={handleChange} 
-                                    className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none"
+                                    className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none bg-white text-gray-900"
                                 >
                                     <option>Mr.</option>
                                     <option>Ms.</option>
@@ -83,43 +84,43 @@ const ContactPage: React.FC<ContactPageProps> = ({ contactInfo }) => {
                                 </select>
                             </div>
                             <div className="col-span-3">
-                                <label htmlFor="name" className="block text-brand-gray font-bold mb-2">Name</label>
-                                <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none" />
+                                <label htmlFor="name" className="block text-brand-gray font-bold mb-2">Name <span className="text-red-600">*</span></label>
+                                <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none bg-white text-gray-900" />
                             </div>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div>
                                 <label htmlFor="email" className="block text-brand-gray font-bold mb-2">Email</label>
-                                <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none" />
+                                <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none bg-white text-gray-900" />
                             </div>
                              <div>
-                                <label htmlFor="phone" className="block text-brand-gray font-bold mb-2">Phone</label>
-                                <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} required className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none" />
+                                <label htmlFor="phone" className="block text-brand-gray font-bold mb-2">Phone <span className="text-red-600">*</span></label>
+                                <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} required className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none bg-white text-gray-900" />
                             </div>
                         </div>
                         
                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                             <div className="sm:col-span-1">
                                 <label htmlFor="city" className="block text-brand-gray font-bold mb-2">City</label>
-                                <input type="text" id="city" name="city" value={formData.city} onChange={handleChange} className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none" />
+                                <input type="text" id="city" name="city" value={formData.city} onChange={handleChange} className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none bg-white text-gray-900" />
                             </div>
                             <div className="sm:col-span-1">
                                 <label htmlFor="state" className="block text-brand-gray font-bold mb-2">State</label>
-                                <input type="text" id="state" name="state" value={formData.state} onChange={handleChange} className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none" />
+                                <input type="text" id="state" name="state" value={formData.state} onChange={handleChange} className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none bg-white text-gray-900" />
                             </div>
                             <div className="sm:col-span-1">
                                 <label htmlFor="zipcode" className="block text-brand-gray font-bold mb-2">Zip Code</label>
-                                <input type="text" id="zipcode" name="zipcode" value={formData.zipcode} onChange={handleChange} className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none" />
+                                <input type="text" id="zipcode" name="zipcode" value={formData.zipcode} onChange={handleChange} className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none bg-white text-gray-900" />
                             </div>
                         </div>
                          <div>
                             <label htmlFor="subject" className="block text-brand-gray font-bold mb-2">Subject</label>
-                            <input type="text" id="subject" name="subject" value={formData.subject} onChange={handleChange} className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none" />
+                            <input type="text" id="subject" name="subject" value={formData.subject} onChange={handleChange} className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none bg-white text-gray-900" />
                         </div>
                         <div>
-                            <label htmlFor="message" className="block text-brand-gray font-bold mb-2">Message</label>
-                            <textarea id="message" name="message" rows={5} value={formData.message} onChange={handleChange} required className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none"></textarea>
+                            <label htmlFor="message" className="block text-brand-gray font-bold mb-2">Message <span className="text-red-600">*</span></label>
+                            <textarea id="message" name="message" rows={5} value={formData.message} onChange={handleChange} required className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none bg-white text-gray-900"></textarea>
                         </div>
                         <div>
                             <button type="submit" className="w-full bg-brand-burgundy text-white font-bold py-3 px-6 rounded-lg hover:bg-brand-rose-gold transition-colors shadow-md">Send Message</button>
