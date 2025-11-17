@@ -10,6 +10,7 @@ export interface BlogPost {
   title: string;
   excerpt: string;
   link: string;
+  image?: string;
 }
 
 export interface Testimonial {
@@ -28,10 +29,20 @@ export interface AboutContent {
   vision: string;
 }
 
+export interface SocialLink {
+  name: string;
+  icon: LucideIcon;
+  url: string;
+}
+
 export interface ContactInfo {
   phone: string;
   email: string;
   address: string;
+  street: string;
+  city: string;
+  state: string;
+  zipcode: string;
   hours: string;
   hoursNote: string;
 }

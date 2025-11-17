@@ -6,17 +6,23 @@ interface ContactPageProps {
     contactInfo: ContactInfo;
 }
 
+const initialFormData = {
+    salutation: 'Mr.',
+    name: '',
+    email: '',
+    phone: '',
+    city: '',
+    state: '',
+    zipcode: '',
+    subject: '',
+    message: '',
+};
+
 const ContactPage: React.FC<ContactPageProps> = ({ contactInfo }) => {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: '',
-    });
+    const [formData, setFormData] = useState(initialFormData);
     const [submitted, setSubmitted] = useState(false);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
@@ -25,6 +31,11 @@ const ContactPage: React.FC<ContactPageProps> = ({ contactInfo }) => {
         console.log('Form submitted:', formData);
         setSubmitted(true);
         // Here you would typically send the data to a backend server
+    };
+
+    const handleReset = () => {
+        setFormData(initialFormData);
+        setSubmitted(false);
     };
 
 
@@ -47,28 +58,68 @@ const ContactPage: React.FC<ContactPageProps> = ({ contactInfo }) => {
                      <div className="text-center p-8 bg-green-100 text-green-800 rounded-lg">
                         <h3 className="text-2xl font-bold">Thank You!</h3>
                         <p className="mt-2">Your message has been sent. We will get back to you shortly.</p>
+                        <button 
+                            onClick={handleReset}
+                            className="mt-6 bg-brand-burgundy text-white font-bold py-2 px-5 rounded-lg hover:bg-brand-rose-gold transition-colors shadow-md"
+                        >
+                            Send Another Message
+                        </button>
                      </div>
                 ) : (
                     <form onSubmit={handleSubmit} className="space-y-6">
-                        <div>
-                            <label htmlFor="name" className="block text-brand-gray font-bold mb-2">Name</label>
-                            <input type="text" id="name" name="name" onChange={handleChange} required className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none" />
+                        <div className="grid grid-cols-4 gap-6">
+                            <div className="col-span-1">
+                                <label htmlFor="salutation" className="block text-brand-gray font-bold mb-2">Salutation</label>
+                                <select 
+                                    id="salutation" 
+                                    name="salutation" 
+                                    value={formData.salutation} 
+                                    onChange={handleChange} 
+                                    className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none"
+                                >
+                                    <option>Mr.</option>
+                                    <option>Ms.</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div className="col-span-3">
+                                <label htmlFor="name" className="block text-brand-gray font-bold mb-2">Name</label>
+                                <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none" />
+                            </div>
                         </div>
-                        <div>
-                            <label htmlFor="email" className="block text-brand-gray font-bold mb-2">Email</label>
-                            <input type="email" id="email" name="email" onChange={handleChange} required className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none" />
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label htmlFor="email" className="block text-brand-gray font-bold mb-2">Email</label>
+                                <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none" />
+                            </div>
+                             <div>
+                                <label htmlFor="phone" className="block text-brand-gray font-bold mb-2">Phone</label>
+                                <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} required className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none" />
+                            </div>
                         </div>
-                        <div>
-                            <label htmlFor="phone" className="block text-brand-gray font-bold mb-2">Phone</label>
-                            <input type="tel" id="phone" name="phone" onChange={handleChange} className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none" />
+                        
+                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                            <div className="sm:col-span-1">
+                                <label htmlFor="city" className="block text-brand-gray font-bold mb-2">City</label>
+                                <input type="text" id="city" name="city" value={formData.city} onChange={handleChange} className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none" />
+                            </div>
+                            <div className="sm:col-span-1">
+                                <label htmlFor="state" className="block text-brand-gray font-bold mb-2">State</label>
+                                <input type="text" id="state" name="state" value={formData.state} onChange={handleChange} className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none" />
+                            </div>
+                            <div className="sm:col-span-1">
+                                <label htmlFor="zipcode" className="block text-brand-gray font-bold mb-2">Zip Code</label>
+                                <input type="text" id="zipcode" name="zipcode" value={formData.zipcode} onChange={handleChange} className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none" />
+                            </div>
                         </div>
                          <div>
                             <label htmlFor="subject" className="block text-brand-gray font-bold mb-2">Subject</label>
-                            <input type="text" id="subject" name="subject" onChange={handleChange} required className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none" />
+                            <input type="text" id="subject" name="subject" value={formData.subject} onChange={handleChange} className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none" />
                         </div>
                         <div>
                             <label htmlFor="message" className="block text-brand-gray font-bold mb-2">Message</label>
-                            <textarea id="message" name="message" rows={5} onChange={handleChange} required className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none"></textarea>
+                            <textarea id="message" name="message" rows={5} value={formData.message} onChange={handleChange} required className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none"></textarea>
                         </div>
                         <div>
                             <button type="submit" className="w-full bg-brand-burgundy text-white font-bold py-3 px-6 rounded-lg hover:bg-brand-rose-gold transition-colors shadow-md">Send Message</button>
@@ -105,14 +156,17 @@ const ContactPage: React.FC<ContactPageProps> = ({ contactInfo }) => {
                       <div className="flex items-start space-x-4">
                         <MapPin className="w-6 h-6 text-brand-rose-gold mt-1"/>
                         <div>
-                            <h4 className="font-bold">Service Area</h4>
-                            <p className="text-brand-gray">{contactInfo.address}</p>
+                            <h4 className="font-bold">Our Location</h4>
+                             <p className="text-brand-gray">Forever a Rose</p>
+                             <p className="text-brand-gray">{contactInfo.street}</p>
+                             <p className="text-brand-gray">{contactInfo.city}, {contactInfo.state} {contactInfo.zipcode}</p>
+                            <p className="text-sm text-brand-gray"><strong>Service Area:</strong> {contactInfo.address}</p>
                         </div>
                      </div>
                 </div>
                 <div className="h-80 w-full rounded-lg shadow-lg overflow-hidden">
                     <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d103884.22557341075!2d-78.55581934989679!3d35.65216174776104!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89ac65e23546a29d%3A0x67332c058766185!2sClayton%2C%20NC!5e0!3m2!1sen!2sus!4v1680000000000!5m2!1sen!2sus"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d103884.22557341075!2d-78.55581934989679!3d35.65216174776104!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89ac65e23546a29d%3A0x67332c058766185!2sClayton%2C%2C%20NC!5e0!3m2!1sen!2sus!4v1680000000000!5m2!1sen!2sus"
                         width="100%" 
                         height="100%" 
                         style={{ border: 0 }}

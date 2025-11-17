@@ -8,7 +8,7 @@ interface BlogPageProps {
 
 const BlogPostCard: React.FC<{ post: BlogPost }> = ({ post }) => (
   <div className="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform hover:-translate-y-2">
-    <img src={`https://picsum.photos/400/250?random=${post.title}`} alt={post.title} className="w-full h-48 object-cover" />
+    <img src={post.image || `https://picsum.photos/400/250?random=${post.title}`} alt={post.title} className="w-full h-48 object-cover" />
     <div className="p-6">
       <h3 className="text-2xl font-serif font-bold text-brand-burgundy">{post.title}</h3>
       <p className="mt-3 text-brand-gray">{post.excerpt}</p>

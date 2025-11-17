@@ -16,9 +16,10 @@ import {
   SERVICES, 
   BLOG_POSTS, 
   TESTIMONIALS, 
-  CONTACT_INFO 
+  CONTACT_INFO,
+  SOCIAL_LINKS
 } from './data';
-import type { AboutContent, Service, BlogPost, Testimonial, ContactInfo } from './types';
+import type { AboutContent, Service, BlogPost, Testimonial, ContactInfo, SocialLink } from './types';
 
 
 function App() {
@@ -28,6 +29,8 @@ function App() {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>(BLOG_POSTS);
   const [testimonials, setTestimonials] = useState<Testimonial[]>(TESTIMONIALS);
   const [contactInfo, setContactInfo] = useState<ContactInfo>(CONTACT_INFO);
+  const [socialLinks, setSocialLinks] = useState<SocialLink[]>(SOCIAL_LINKS);
+  const [homeImage, setHomeImage] = useState<string>("https://picsum.photos/1600/900?image=22");
 
   return (
     <HashRouter>
@@ -36,7 +39,7 @@ function App() {
         <Header />
         <main className="flex-grow">
           <Routes>
-            <Route path="/" element={<HomePage missionStatement={homeMission} services={services} testimonials={testimonials} />} />
+            <Route path="/" element={<HomePage missionStatement={homeMission} services={services} testimonials={testimonials} homeImage={homeImage} />} />
             <Route path="/about" element={<AboutPage content={aboutContent} />} />
             <Route path="/services" element={<ServicesPage services={services} />} />
             <Route path="/blog" element={<BlogPage posts={blogPosts} />} />
@@ -56,11 +59,15 @@ function App() {
                 setTestimonials={setTestimonials}
                 contactInfo={contactInfo}
                 setContactInfo={setContactInfo}
+                socialLinks={socialLinks}
+                setSocialLinks={setSocialLinks}
+                homeImage={homeImage}
+                setHomeImage={setHomeImage}
               />
             } />
           </Routes>
         </main>
-        <Footer contactInfo={contactInfo} />
+        <Footer contactInfo={contactInfo} socialLinks={socialLinks} />
       </div>
     </HashRouter>
   );

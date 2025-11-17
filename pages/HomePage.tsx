@@ -8,9 +8,10 @@ interface HomePageProps {
   missionStatement: string;
   services: Service[];
   testimonials: Testimonial[];
+  homeImage: string;
 }
 
-const HomePage: React.FC<HomePageProps> = ({ missionStatement, services, testimonials }) => {
+const HomePage: React.FC<HomePageProps> = ({ missionStatement, services, testimonials, homeImage }) => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
   useEffect(() => {
@@ -26,7 +27,7 @@ const HomePage: React.FC<HomePageProps> = ({ missionStatement, services, testimo
       {/* Hero Section */}
       <section className="relative h-[70vh] min-h-[500px] flex items-center text-white">
         <div className="absolute inset-0 bg-black opacity-40"></div>
-        <img src="https://picsum.photos/1600/900?image=22" alt="Caregiver with senior" className="absolute inset-0 w-full h-full object-cover"/>
+        <img src={homeImage} alt="Caregiver with senior" className="absolute inset-0 w-full h-full object-cover"/>
         <div className="relative container mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-6xl font-serif font-bold leading-tight drop-shadow-lg">
             Premium, Compassionate In-Home Senior Care

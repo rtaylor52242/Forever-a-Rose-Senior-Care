@@ -1,5 +1,5 @@
-import type { Service, BlogPost, Testimonial, AboutContent, ContactInfo } from './types';
-import { HeartHandshake, Pill, Car, UtensilsCrossed, Users, BellRing } from 'lucide-react';
+import type { Service, BlogPost, Testimonial, AboutContent, ContactInfo, SocialLink } from './types';
+import { HeartHandshake, Pill, Car, UtensilsCrossed, Users, BellRing, Facebook, Instagram, Linkedin } from 'lucide-react';
 
 export const HOME_MISSION = "Forever a Rose Senior Care is dedicated to providing premium, compassionate, and personalized in-home senior care that enhances the quality of life for clients and peace of mind for families.";
 
@@ -50,16 +50,19 @@ export const BLOG_POSTS: BlogPost[] = [
     title: '5 Benefits of In-Home Senior Care',
     excerpt: 'Discover how staying in the comfort of your own home can enhance independence, provide personalized attention, and reduce stress for seniors and their families.',
     link: '#/blog/1',
+    image: `https://picsum.photos/400/250?random=1`,
   },
   {
     title: 'Choosing the Right Caregiver for Your Loved One',
     excerpt: 'A guide to finding compassionate, trustworthy, and skilled caregivers, focusing on qualifications, experience, and the importance of a personal connection.',
     link: '#/blog/2',
+    image: `https://picsum.photos/400/250?random=2`,
   },
   {
     title: 'Healthy Eating Tips for Seniors',
     excerpt: 'Simple and delicious ways to maintain a balanced diet for optimal senior health, energy, and vitality, with practical meal ideas.',
     link: '#/blog/3',
+    image: `https://picsum.photos/400/250?random=3`,
   },
 ];
 
@@ -78,10 +81,20 @@ export const TESTIMONIALS: Testimonial[] = [
   },
 ];
 
+export const SOCIAL_LINKS: SocialLink[] = [
+    { name: 'Facebook', icon: Facebook, url: 'https://facebook.com' },
+    { name: 'Instagram', icon: Instagram, url: 'https://instagram.com' },
+    { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com' },
+];
+
 export const CONTACT_INFO: ContactInfo = {
   phone: '919-626-1260',
   email: 'ForeveraRose.FamilyServices@gmail.com',
   address: 'Clayton, NC & Surrounding Areas',
+  street: '123 Rose Petal Lane',
+  city: 'Clayton',
+  state: 'NC',
+  zipcode: '27520',
   hours: 'Monday - Friday, 9:00 AM - 5:00 PM',
   hoursNote: '(Flexible for urgent care needs)'
 };

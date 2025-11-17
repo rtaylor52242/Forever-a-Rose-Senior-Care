@@ -1,14 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { NAV_LINKS, SOCIAL_LINKS } from '../constants';
+import { NAV_LINKS } from '../constants';
 import { Flower2 } from 'lucide-react';
-import type { ContactInfo } from '../types';
+import type { ContactInfo, SocialLink } from '../types';
 
 interface FooterProps {
   contactInfo: ContactInfo;
+  socialLinks: SocialLink[];
 }
 
-const Footer: React.FC<FooterProps> = ({ contactInfo }) => {
+const Footer: React.FC<FooterProps> = ({ contactInfo, socialLinks }) => {
   return (
     <footer className="bg-brand-gray text-brand-cream">
       <div className="container mx-auto px-6 py-12">
@@ -44,7 +45,7 @@ const Footer: React.FC<FooterProps> = ({ contactInfo }) => {
           <div>
             <h3 className="font-bold font-serif text-lg text-white">Follow Us</h3>
             <div className="flex space-x-4 mt-4">
-              {SOCIAL_LINKS.map(social => (
+              {socialLinks.map(social => (
                 <a key={social.name} href={social.url} target="_blank" rel="noopener noreferrer" className="text-brand-cream hover:text-brand-rose-gold transition-colors">
                   <social.icon size={24} />
                 </a>
