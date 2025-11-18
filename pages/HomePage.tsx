@@ -29,7 +29,7 @@ const HomePage: React.FC<HomePageProps> = ({ missionStatement, services, testimo
         <div className="absolute inset-0 bg-black opacity-40"></div>
         <img src={homeImage} alt="Caregiver with senior" className="absolute inset-0 w-full h-full object-cover"/>
         <div className="relative container mx-auto px-6 text-center">
-          <h1 className="text-4xl md:text-6xl font-serif font-bold leading-tight drop-shadow-lg">
+          <h1 className="text-4xl md:text-6xl font-serif font-bold leading-tight" style={{textShadow: '0 0 5px rgba(0,0,0,0.7)'}}>
             Premium, Compassionate In-Home Senior Care
           </h1>
           <p className="mt-4 text-xl md:text-2xl font-light drop-shadow-md">
