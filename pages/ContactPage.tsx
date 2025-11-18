@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Phone, Mail, Clock, MapPin } from 'lucide-react';
 import type { ContactInfo } from '../types';
 
+// Let TypeScript know that emailjs is available on the global scope
+declare const emailjs: any;
+
 interface ContactPageProps {
     contactInfo: ContactInfo;
 }
@@ -20,7 +23,7 @@ const initialFormData = {
 
 const ContactPage: React.FC<ContactPageProps> = ({ contactInfo }) => {
     const [formData, setFormData] = useState(initialFormData);
-    const [submitted, setSubmitted] = useState(false);
+    const [submissionStatus, setSubmissionStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,14 +31,22 @@ const ContactPage: React.FC<ContactPageProps> = ({ contactInfo }) => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('Form submitted:', formData);
-        setSubmitted(true);
-        // Here you would typically send the data to a backend server
+        setSubmissionStatus('sending');
+
+        emailjs.send('service_rtcduo9', 'template_6jl03ks', formData, {
+            publicKey: 'Y9Y1JoilJyHUSruSV',
+        })
+        .then(() => {
+            setSubmissionStatus('success');
+        }, (error: any) => {
+            console.error('FAILED...', error);
+            setSubmissionStatus('error');
+        });
     };
 
     const handleReset = () => {
         setFormData(initialFormData);
-        setSubmitted(false);
+        setSubmissionStatus('idle');
     };
 
 
@@ -54,7 +65,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ contactInfo }) => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div className="bg-brand-cream p-8 rounded-lg shadow-lg">
                 <h2 className="text-3xl font-serif text-brand-burgundy mb-2">Contact Form</h2>
-                {submitted ? (
+                {submissionStatus === 'success' ? (
                      <div className="text-center p-8 bg-green-100 text-green-800 rounded-lg">
                         <h3 className="text-2xl font-bold">Thank You!</h3>
                         <p className="mt-2">Your message has been sent. We will get back to you shortly.</p>
@@ -63,6 +74,17 @@ const ContactPage: React.FC<ContactPageProps> = ({ contactInfo }) => {
                             className="mt-6 bg-brand-burgundy text-white font-bold py-2 px-5 rounded-lg hover:bg-brand-rose-gold transition-colors shadow-md"
                         >
                             Send Another Message
+                        </button>
+                     </div>
+                ) : submissionStatus === 'error' ? (
+                    <div className="text-center p-8 bg-red-100 text-red-800 rounded-lg">
+                        <h3 className="text-2xl font-bold">Something Went Wrong</h3>
+                        <p className="mt-2">We couldn't send your message. Please try again or contact us directly at <a href={`mailto:${contactInfo.email}`} className="font-bold underline">{contactInfo.email}</a>.</p>
+                        <button 
+                            onClick={handleReset}
+                            className="mt-6 bg-brand-burgundy text-white font-bold py-2 px-5 rounded-lg hover:bg-brand-rose-gold transition-colors shadow-md"
+                        >
+                            Try Again
                         </button>
                      </div>
                 ) : (
@@ -123,7 +145,13 @@ const ContactPage: React.FC<ContactPageProps> = ({ contactInfo }) => {
                             <textarea id="message" name="message" rows={5} value={formData.message} onChange={handleChange} required className="w-full p-3 border border-brand-blue rounded-lg focus:ring-2 focus:ring-brand-rose-gold focus:outline-none bg-white text-gray-900"></textarea>
                         </div>
                         <div>
-                            <button type="submit" className="w-full bg-brand-burgundy text-white font-bold py-3 px-6 rounded-lg hover:bg-brand-rose-gold transition-colors shadow-md">Send Message</button>
+                            <button 
+                                type="submit" 
+                                className="w-full bg-brand-burgundy text-white font-bold py-3 px-6 rounded-lg hover:bg-brand-rose-gold transition-colors shadow-md disabled:bg-brand-gray disabled:cursor-not-allowed"
+                                disabled={submissionStatus === 'sending'}
+                            >
+                                {submissionStatus === 'sending' ? 'Sending...' : 'Send Message'}
+                            </button>
                         </div>
                     </form>
                 )}
