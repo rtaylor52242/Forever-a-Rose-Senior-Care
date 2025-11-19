@@ -10,7 +10,7 @@ export const ABOUT_CONTENT: AboutContent = {
   ],
   mission: "To provide premium, compassionate, and personalized in-home senior care that enhances the quality of life for clients and peace of mind for families.",
   vision: "To become the most trusted and sought-after luxury senior care provider in Clayton and the surrounding North Carolina areas.",
-  image: "https://picsum.photos/600/800?image=1027",
+  image: "./assets/about-image.svg",
   coreValues: [
     {
       title: 'Dignity',
