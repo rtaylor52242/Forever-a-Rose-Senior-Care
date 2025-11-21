@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { HeartHandshake, Save } from 'lucide-react';
+import { HeartHandshake, Save, X } from 'lucide-react';
 import type { AboutContent, Service, BlogPost, Testimonial, ContactInfo, SocialLink } from '../types';
 
 interface AdminPageProps {
@@ -73,9 +73,11 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
         setter(newItems);
     };
 
-    const handleItemRemove = (setter: any, items: any[], indexToRemove: number, itemName = 'item') => {
+    const handleItemRemove = (e: React.MouseEvent, setter: React.Dispatch<React.SetStateAction<any[]>>, indexToRemove: number, itemName = 'item') => {
+        e.preventDefault();
+        e.stopPropagation();
         if (window.confirm(`Are you sure you want to delete this ${itemName}? This action cannot be undone.`)) {
-            setter(items.filter((_: any, index: number) => index !== indexToRemove));
+            setter((prevItems) => prevItems.filter((_, index) => index !== indexToRemove));
         }
     };
 
@@ -283,11 +285,12 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                {localServices.map((service, index) => (
                    <div key={index} className="mb-6 p-4 border rounded-md relative">
                        <button
-                           onClick={() => handleItemRemove(setLocalServices, localServices, index, 'service')}
-                           className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 w-7 h-7 flex items-center justify-center hover:bg-red-600 transition-colors text-xs font-bold"
+                           type="button"
+                           onClick={(e) => handleItemRemove(e, setLocalServices, index, 'service')}
+                           className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 w-7 h-7 flex items-center justify-center hover:bg-red-600 transition-colors z-10"
                            aria-label="Remove Service"
                        >
-                           X
+                           <X size={16} />
                        </button>
                        <h3 className="font-bold text-lg mb-2">{service.title || "New Service"}</h3>
                        <AdminInput 
@@ -303,6 +306,7 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                    </div>
                ))}
                <button
+                    type="button"
                     onClick={handleAddService}
                     className="w-full mt-2 bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors shadow-md"
                >
@@ -315,11 +319,12 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                {localBlogPosts.map((post, index) => (
                    <div key={index} className="mb-6 p-4 border rounded-md relative">
                        <button
-                           onClick={() => handleItemRemove(setLocalBlogPosts, localBlogPosts, index, 'blog post')}
-                           className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 w-7 h-7 flex items-center justify-center hover:bg-red-600 transition-colors text-xs font-bold"
+                           type="button"
+                           onClick={(e) => handleItemRemove(e, setLocalBlogPosts, index, 'blog post')}
+                           className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 w-7 h-7 flex items-center justify-center hover:bg-red-600 transition-colors z-10"
                            aria-label="Remove Blog Post"
                        >
-                           X
+                           <X size={16} />
                        </button>
                         <AdminInput 
                             label="Post Title"
@@ -346,6 +351,7 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                    </div>
                ))}
                <button
+                    type="button"
                     onClick={handleAddBlogPost}
                     className="w-full mt-2 bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors shadow-md"
                >
@@ -358,11 +364,12 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                {localTestimonials.map((testimonial, index) => (
                    <div key={index} className="mb-6 p-4 border rounded-md relative">
                         <button
-                           onClick={() => handleItemRemove(setLocalTestimonials, localTestimonials, index, 'testimonial')}
-                           className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 w-7 h-7 flex items-center justify-center hover:bg-red-600 transition-colors text-xs font-bold"
+                           type="button"
+                           onClick={(e) => handleItemRemove(e, setLocalTestimonials, index, 'testimonial')}
+                           className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 w-7 h-7 flex items-center justify-center hover:bg-red-600 transition-colors z-10"
                            aria-label="Remove Testimonial"
                        >
-                           X
+                           <X size={16} />
                        </button>
                         <AdminTextarea 
                             label="Quote"
@@ -377,6 +384,7 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                    </div>
                ))}
                 <button
+                    type="button"
                     onClick={handleAddTestimonial}
                     className="w-full mt-2 bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors shadow-md"
                >
@@ -437,6 +445,7 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
             {/* Floating Save Button */}
             <div className="fixed bottom-6 right-6 z-50">
                 <button 
+                    type="button"
                     onClick={handleSaveAll}
                     className="bg-brand-burgundy text-white font-bold py-4 px-8 rounded-full shadow-2xl hover:bg-brand-rose-gold transition-all transform hover:scale-105 flex items-center gap-3 border-2 border-white"
                     aria-label="Save All Changes"
