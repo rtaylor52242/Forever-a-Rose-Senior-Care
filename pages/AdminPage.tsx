@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { HeartHandshake } from 'lucide-react';
+import { HeartHandshake, Save } from 'lucide-react';
 import type { AboutContent, Service, BlogPost, Testimonial, ContactInfo, SocialLink } from '../types';
 
 interface AdminPageProps {
@@ -21,7 +22,7 @@ interface AdminPageProps {
   setHomeImage: (value: string) => void;
 }
 
-const AdminInput = ({ label, ...props }) => (
+const AdminInput = ({ label, ...props }: any) => (
     <div className="mb-4">
         <label className="block text-sm font-bold text-brand-gray mb-1">{label}</label>
         <input 
@@ -31,7 +32,7 @@ const AdminInput = ({ label, ...props }) => (
     </div>
 );
 
-const AdminTextarea = ({ label, ...props }) => (
+const AdminTextarea = ({ label, ...props }: any) => (
     <div className="mb-4">
         <label className="block text-sm font-bold text-brand-gray mb-1">{label}</label>
         <textarea 
@@ -43,17 +44,11 @@ const AdminTextarea = ({ label, ...props }) => (
 );
 
 
-const AdminSection: React.FC<{ title: string, onSave: () => void, children: React.ReactNode }> = ({ title, onSave, children }) => {
+const AdminSection: React.FC<{ title: string, children: React.ReactNode }> = ({ title, children }) => {
     return (
         <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
             <h2 className="text-3xl font-serif text-brand-burgundy mb-6 border-b pb-2">{title}</h2>
             {children}
-            <button 
-                onClick={onSave}
-                className="w-full mt-4 bg-brand-burgundy text-white font-bold py-2 px-4 rounded-lg hover:bg-brand-rose-gold transition-colors shadow-md"
-            >
-                Save Changes
-            </button>
         </div>
     );
 };
@@ -72,15 +67,15 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
     const [localSocialLinks, setLocalSocialLinks] = useState(props.socialLinks);
     const [localHomeImage, setLocalHomeImage] = useState(props.homeImage);
     
-    const handleItemChange = (setter, items, index, field, value) => {
+    const handleItemChange = (setter: any, items: any[], index: number, field: string, value: any) => {
         const newItems = [...items];
         newItems[index] = { ...newItems[index], [field]: value };
         setter(newItems);
     };
 
-    const handleItemRemove = (setter, items, indexToRemove, itemName = 'item') => {
+    const handleItemRemove = (setter: any, items: any[], indexToRemove: number, itemName = 'item') => {
         if (window.confirm(`Are you sure you want to delete this ${itemName}? This action cannot be undone.`)) {
-            setter(items.filter((_, index) => index !== indexToRemove));
+            setter(items.filter((_: any, index: number) => index !== indexToRemove));
         }
     };
 
@@ -156,6 +151,18 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
         setIsLoggedIn(true);
     };
 
+    const handleSaveAll = () => {
+        props.setHomeMission(localHomeMission);
+        props.setAboutContent(localAbout);
+        props.setServices(localServices);
+        props.setBlogPosts(localBlogPosts);
+        props.setTestimonials(localTestimonials);
+        props.setContactInfo(localContactInfo);
+        props.setSocialLinks(localSocialLinks);
+        props.setHomeImage(localHomeImage);
+        alert("All sections have been saved successfully!");
+    };
+
     if (!isLoggedIn) {
         return (
             <div className="min-h-screen bg-brand-cream flex items-center justify-center p-4">
@@ -166,14 +173,14 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                             label="Username"
                             type="text"
                             value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            onChange={(e: any) => setUsername(e.target.value)}
                             placeholder="Enter username"
                         />
                         <AdminInput 
                             label="Password"
                             type="password"
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(e: any) => setPassword(e.target.value)}
                             placeholder="Enter password"
                         />
                         <button 
@@ -189,14 +196,14 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
     }
 
     return (
-    <div className="py-12 bg-brand-blue/5">
-        <div className="container mx-auto px-6">
+    <div className="py-12 bg-brand-blue/5 relative min-h-screen">
+        <div className="container mx-auto px-6 pb-24">
             <h1 className="text-4xl md:text-5xl font-serif font-bold text-brand-burgundy text-center mb-12">
                 Admin Dashboard
             </h1>
 
             {/* Home Page Hero Image */}
-            <AdminSection title="Home Page Hero Image" onSave={() => props.setHomeImage(localHomeImage)}>
+            <AdminSection title="Home Page Hero Image">
                 <div className="mb-4">
                     <label className="block text-sm font-bold text-brand-gray mb-2">Current Image Preview</label>
                     <img src={localHomeImage} alt="Home page hero preview" className="w-full h-auto object-cover rounded-md mb-4 max-h-64 border"/>
@@ -212,16 +219,16 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
             </AdminSection>
 
             {/* Home Page Mission */}
-            <AdminSection title="Home Page Mission" onSave={() => props.setHomeMission(localHomeMission)}>
+            <AdminSection title="Home Page Mission">
                 <AdminTextarea 
                     label="Mission Statement"
                     value={localHomeMission}
-                    onChange={(e) => setLocalHomeMission(e.target.value)}
+                    onChange={(e: any) => setLocalHomeMission(e.target.value)}
                 />
             </AdminSection>
 
             {/* About Page */}
-            <AdminSection title="About Us Page" onSave={() => props.setAboutContent(localAbout)}>
+            <AdminSection title="About Us Page">
                 <div className="mb-4">
                     <label className="block text-sm font-bold text-brand-gray mb-2">About Page Image</label>
                     <img src={localAbout.image} alt="About page preview" className="w-full h-auto object-cover rounded-md mb-4 max-h-64 border"/>
@@ -237,22 +244,22 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                 <AdminTextarea 
                     label="Story (Paragraph 1)"
                     value={localAbout.story[0]}
-                    onChange={(e) => setLocalAbout({...localAbout, story: [e.target.value, localAbout.story[1]]})}
+                    onChange={(e: any) => setLocalAbout({...localAbout, story: [e.target.value, localAbout.story[1]]})}
                 />
                  <AdminTextarea 
                     label="Story (Paragraph 2)"
                     value={localAbout.story[1]}
-                    onChange={(e) => setLocalAbout({...localAbout, story: [localAbout.story[0], e.target.value]})}
+                    onChange={(e: any) => setLocalAbout({...localAbout, story: [localAbout.story[0], e.target.value]})}
                 />
                 <AdminTextarea 
                     label="Mission"
                     value={localAbout.mission}
-                    onChange={(e) => setLocalAbout({...localAbout, mission: e.target.value})}
+                    onChange={(e: any) => setLocalAbout({...localAbout, mission: e.target.value})}
                 />
                 <AdminTextarea 
                     label="Vision"
                     value={localAbout.vision}
-                    onChange={(e) => setLocalAbout({...localAbout, vision: e.target.value})}
+                    onChange={(e: any) => setLocalAbout({...localAbout, vision: e.target.value})}
                 />
                 <h3 className="text-xl font-serif text-brand-burgundy mt-8 mb-4 border-t pt-4">Core Values</h3>
                 {localAbout.coreValues.map((value, index) => (
@@ -260,19 +267,19 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                         <AdminInput
                             label={`Value ${index + 1} Title`}
                             value={value.title}
-                            onChange={(e) => handleCoreValueChange(index, 'title', e.target.value)}
+                            onChange={(e: any) => handleCoreValueChange(index, 'title', e.target.value)}
                         />
                         <AdminTextarea
                             label={`Value ${index + 1} Description`}
                             value={value.description}
-                            onChange={(e) => handleCoreValueChange(index, 'description', e.target.value)}
+                            onChange={(e: any) => handleCoreValueChange(index, 'description', e.target.value)}
                         />
                     </div>
                 ))}
             </AdminSection>
 
             {/* Services */}
-            <AdminSection title="Our Services" onSave={() => props.setServices(localServices)}>
+            <AdminSection title="Our Services">
                {localServices.map((service, index) => (
                    <div key={index} className="mb-6 p-4 border rounded-md relative">
                        <button
@@ -286,12 +293,12 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                        <AdminInput 
                             label="Service Title"
                             value={service.title}
-                            onChange={(e) => handleItemChange(setLocalServices, localServices, index, 'title', e.target.value)}
+                            onChange={(e: any) => handleItemChange(setLocalServices, localServices, index, 'title', e.target.value)}
                         />
                         <AdminTextarea
                             label="Service Description"
                             value={service.description}
-                            onChange={(e) => handleItemChange(setLocalServices, localServices, index, 'description', e.target.value)}
+                            onChange={(e: any) => handleItemChange(setLocalServices, localServices, index, 'description', e.target.value)}
                         />
                    </div>
                ))}
@@ -304,7 +311,7 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
             </AdminSection>
 
             {/* Blog Posts */}
-            <AdminSection title="Blog Posts" onSave={() => props.setBlogPosts(localBlogPosts)}>
+            <AdminSection title="Blog Posts">
                {localBlogPosts.map((post, index) => (
                    <div key={index} className="mb-6 p-4 border rounded-md relative">
                        <button
@@ -317,12 +324,12 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                         <AdminInput 
                             label="Post Title"
                             value={post.title}
-                            onChange={(e) => handleItemChange(setLocalBlogPosts, localBlogPosts, index, 'title', e.target.value)}
+                            onChange={(e: any) => handleItemChange(setLocalBlogPosts, localBlogPosts, index, 'title', e.target.value)}
                         />
                         <AdminTextarea
                             label="Post Excerpt"
                             value={post.excerpt}
-                            onChange={(e) => handleItemChange(setLocalBlogPosts, localBlogPosts, index, 'excerpt', e.target.value)}
+                            onChange={(e: any) => handleItemChange(setLocalBlogPosts, localBlogPosts, index, 'excerpt', e.target.value)}
                         />
                         <div className="mb-4">
                             <label className="block text-sm font-bold text-brand-gray mb-1">Blog Post Photo</label>
@@ -347,7 +354,7 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
             </AdminSection>
 
             {/* Testimonials */}
-             <AdminSection title="Testimonials" onSave={() => props.setTestimonials(localTestimonials)}>
+             <AdminSection title="Testimonials">
                {localTestimonials.map((testimonial, index) => (
                    <div key={index} className="mb-6 p-4 border rounded-md relative">
                         <button
@@ -360,12 +367,12 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                         <AdminTextarea 
                             label="Quote"
                             value={testimonial.quote}
-                            onChange={(e) => handleItemChange(setLocalTestimonials, localTestimonials, index, 'quote', e.target.value)}
+                            onChange={(e: any) => handleItemChange(setLocalTestimonials, localTestimonials, index, 'quote', e.target.value)}
                         />
                         <AdminInput
                             label="Author"
                             value={testimonial.author}
-                            onChange={(e) => handleItemChange(setLocalTestimonials, localTestimonials, index, 'author', e.target.value)}
+                            onChange={(e: any) => handleItemChange(setLocalTestimonials, localTestimonials, index, 'author', e.target.value)}
                         />
                    </div>
                ))}
@@ -378,48 +385,42 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
             </AdminSection>
 
             {/* Contact & Socials */}
-            <AdminSection 
-                title="Contact & Socials" 
-                onSave={() => {
-                    props.setContactInfo(localContactInfo);
-                    props.setSocialLinks(localSocialLinks);
-                }}
-            >
+            <AdminSection title="Contact & Socials">
                 <h3 className="text-xl font-serif text-brand-burgundy mb-4">Contact Details</h3>
                 <AdminInput 
                     label="Phone Number"
                     value={localContactInfo.phone}
-                    onChange={(e) => setLocalContactInfo({...localContactInfo, phone: e.target.value})}
+                    onChange={(e: any) => setLocalContactInfo({...localContactInfo, phone: e.target.value})}
                 />
                 <AdminInput 
                     label="Email Address"
                     value={localContactInfo.email}
-                    onChange={(e) => setLocalContactInfo({...localContactInfo, email: e.target.value})}
+                    onChange={(e: any) => setLocalContactInfo({...localContactInfo, email: e.target.value})}
                 />
                  <AdminInput 
                     label="Address / Service Area"
                     value={localContactInfo.address}
-                    onChange={(e) => setLocalContactInfo({...localContactInfo, address: e.target.value})}
+                    onChange={(e: any) => setLocalContactInfo({...localContactInfo, address: e.target.value})}
                 />
                 <AdminInput 
                     label="Street Address"
                     value={localContactInfo.street}
-                    onChange={(e) => setLocalContactInfo({...localContactInfo, street: e.target.value})}
+                    onChange={(e: any) => setLocalContactInfo({...localContactInfo, street: e.target.value})}
                 />
                 <AdminInput 
                     label="City"
                     value={localContactInfo.city}
-                    onChange={(e) => setLocalContactInfo({...localContactInfo, city: e.target.value})}
+                    onChange={(e: any) => setLocalContactInfo({...localContactInfo, city: e.target.value})}
                 />
                 <AdminInput 
                     label="State"
                     value={localContactInfo.state}
-                    onChange={(e) => setLocalContactInfo({...localContactInfo, state: e.target.value})}
+                    onChange={(e: any) => setLocalContactInfo({...localContactInfo, state: e.target.value})}
                 />
                 <AdminInput 
                     label="Zip Code"
                     value={localContactInfo.zipcode}
-                    onChange={(e) => setLocalContactInfo({...localContactInfo, zipcode: e.target.value})}
+                    onChange={(e: any) => setLocalContactInfo({...localContactInfo, zipcode: e.target.value})}
                 />
                 
                 <h3 className="text-xl font-serif text-brand-burgundy mt-8 mb-4 border-t pt-4">Social Media Links</h3>
@@ -428,10 +429,22 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                         key={link.name}
                         label={`${link.name} URL`}
                         value={link.url}
-                        onChange={(e) => handleItemChange(setLocalSocialLinks, localSocialLinks, index, 'url', e.target.value)}
+                        onChange={(e: any) => handleItemChange(setLocalSocialLinks, localSocialLinks, index, 'url', e.target.value)}
                     />
                 ))}
             </AdminSection>
+
+            {/* Floating Save Button */}
+            <div className="fixed bottom-6 right-6 z-50">
+                <button 
+                    onClick={handleSaveAll}
+                    className="bg-brand-burgundy text-white font-bold py-4 px-8 rounded-full shadow-2xl hover:bg-brand-rose-gold transition-all transform hover:scale-105 flex items-center gap-3 border-2 border-white"
+                    aria-label="Save All Changes"
+                >
+                    <Save size={24} />
+                    Save All Changes
+                </button>
+            </div>
 
         </div>
     </div>
