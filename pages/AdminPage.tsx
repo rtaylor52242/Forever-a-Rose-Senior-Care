@@ -210,7 +210,9 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                     <label className="block text-sm font-bold text-brand-gray mb-2">Current Image Preview</label>
                     <img src={localHomeImage} alt="Home page hero preview" className="w-full h-auto object-cover rounded-md mb-4 max-h-64 border"/>
                     
-                    <label className="block text-sm font-bold text-brand-gray mb-2">Upload New Image</label>
+                    <label className="block text-sm font-bold text-brand-gray mb-2">
+                        Upload New Image <span className="text-brand-burgundy/70 font-normal ml-1 text-xs">(Recommended: 1600 x 900 px)</span>
+                    </label>
                     <input
                         type="file"
                         accept="image/*"
@@ -235,7 +237,9 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                     <label className="block text-sm font-bold text-brand-gray mb-2">About Page Image</label>
                     <img src={localAbout.image} alt="About page preview" className="w-full h-auto object-cover rounded-md mb-4 max-h-64 border"/>
                     
-                    <label className="block text-sm font-bold text-brand-gray mb-2">Upload New Image</label>
+                    <label className="block text-sm font-bold text-brand-gray mb-2">
+                        Upload New Image <span className="text-brand-burgundy/70 font-normal ml-1 text-xs">(Recommended: 600 x 800 px)</span>
+                    </label>
                     <input
                         type="file"
                         accept="image/*"
@@ -337,7 +341,9 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                             onChange={(e: any) => handleItemChange(setLocalBlogPosts, localBlogPosts, index, 'excerpt', e.target.value)}
                         />
                         <div className="mb-4">
-                            <label className="block text-sm font-bold text-brand-gray mb-1">Blog Post Photo</label>
+                            <label className="block text-sm font-bold text-brand-gray mb-1">
+                                Blog Post Photo <span className="text-brand-burgundy/70 font-normal ml-1 text-xs">(Recommended: 800 x 500 px)</span>
+                            </label>
                             {post.image && (
                                 <img src={post.image} alt="Blog post preview" className="w-48 h-auto object-cover rounded-md mb-2"/>
                             )}
