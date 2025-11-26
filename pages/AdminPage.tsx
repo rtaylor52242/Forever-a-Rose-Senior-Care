@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { HeartHandshake, Save, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { HeartHandshake, Save, X, Check } from 'lucide-react';
 import type { AboutContent, Service, BlogPost, Testimonial, ContactInfo, SocialLink } from '../types';
 
 interface AdminPageProps {
@@ -58,6 +58,7 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
+    // Local state for form fields
     const [localHomeMission, setLocalHomeMission] = useState(props.homeMission);
     const [localAbout, setLocalAbout] = useState(props.aboutContent);
     const [localServices, setLocalServices] = useState(props.services);
@@ -66,19 +67,44 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
     const [localContactInfo, setLocalContactInfo] = useState(props.contactInfo);
     const [localSocialLinks, setLocalSocialLinks] = useState(props.socialLinks);
     const [localHomeImage, setLocalHomeImage] = useState(props.homeImage);
+
+    // UX State
+    const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+    const [saveStatus, setSaveStatus] = useState<'idle' | 'saved'>('idle');
+
+    // Warn user before leaving if there are unsaved changes
+    useEffect(() => {
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            if (hasUnsavedChanges) {
+                e.preventDefault();
+                e.returnValue = ''; // Chrome requires this to be set
+            }
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [hasUnsavedChanges]);
     
+    // Helper to mark state as dirty
+    const markAsDirty = () => {
+        if (!hasUnsavedChanges) setHasUnsavedChanges(true);
+        if (saveStatus === 'saved') setSaveStatus('idle');
+    };
+
     const handleItemChange = (setter: any, items: any[], index: number, field: string, value: any) => {
         const newItems = [...items];
         newItems[index] = { ...newItems[index], [field]: value };
         setter(newItems);
+        markAsDirty();
     };
 
-    const handleItemRemove = (e: React.MouseEvent, setter: React.Dispatch<React.SetStateAction<any[]>>, indexToRemove: number, itemName = 'item') => {
+    const handleItemRemove = (e: React.MouseEvent, setter: any, indexToRemove: number, itemName = 'item') => {
         e.preventDefault();
         e.stopPropagation();
-        if (window.confirm(`Are you sure you want to delete this ${itemName}? This action cannot be undone.`)) {
-            setter((prevItems) => prevItems.filter((_, index) => index !== indexToRemove));
-        }
+        setter((prevItems: any[]) => prevItems.filter((_, index) => index !== indexToRemove));
+        markAsDirty();
     };
 
     const handleAddService = () => {
@@ -86,6 +112,7 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
             ...localServices,
             { icon: HeartHandshake, title: '', description: '' }
         ]);
+        markAsDirty();
     };
 
     const handleAddBlogPost = () => {
@@ -93,6 +120,7 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
             ...localBlogPosts,
             { title: '', excerpt: '', link: '#', image: '' }
         ]);
+        markAsDirty();
     };
 
     const handleAddTestimonial = () => {
@@ -100,6 +128,7 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
             ...localTestimonials,
             { quote: '', author: '' }
         ]);
+        markAsDirty();
     };
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
@@ -122,6 +151,7 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
             reader.onload = (event) => {
                 if (event.target?.result) {
                     setLocalHomeImage(event.target.result as string);
+                    markAsDirty();
                 }
             };
             reader.readAsDataURL(file);
@@ -135,6 +165,7 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
             reader.onload = (event) => {
                 if (event.target?.result) {
                     setLocalAbout({ ...localAbout, image: event.target.result as string });
+                    markAsDirty();
                 }
             };
             reader.readAsDataURL(file);
@@ -145,6 +176,13 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
         const newCoreValues = [...localAbout.coreValues];
         newCoreValues[index] = { ...newCoreValues[index], [field]: value };
         setLocalAbout({ ...localAbout, coreValues: newCoreValues });
+        markAsDirty();
+    };
+
+    // Generic wrapper for simple state setters to track changes
+    const handleFieldChange = (setter: any, value: any) => {
+        setter(value);
+        markAsDirty();
     };
 
     const handleLogin = (e: React.FormEvent) => {
@@ -162,7 +200,14 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
         props.setContactInfo(localContactInfo);
         props.setSocialLinks(localSocialLinks);
         props.setHomeImage(localHomeImage);
-        alert("All sections have been saved successfully!");
+        
+        setHasUnsavedChanges(false);
+        setSaveStatus('saved');
+        
+        // Reset status after 3 seconds
+        setTimeout(() => {
+            setSaveStatus('idle');
+        }, 3000);
     };
 
     if (!isLoggedIn) {
@@ -227,7 +272,7 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                 <AdminTextarea 
                     label="Mission Statement"
                     value={localHomeMission}
-                    onChange={(e: any) => setLocalHomeMission(e.target.value)}
+                    onChange={(e: any) => handleFieldChange(setLocalHomeMission, e.target.value)}
                 />
             </AdminSection>
 
@@ -250,22 +295,22 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                 <AdminTextarea 
                     label="Story (Paragraph 1)"
                     value={localAbout.story[0]}
-                    onChange={(e: any) => setLocalAbout({...localAbout, story: [e.target.value, localAbout.story[1]]})}
+                    onChange={(e: any) => handleFieldChange(setLocalAbout, {...localAbout, story: [e.target.value, localAbout.story[1]]})}
                 />
                  <AdminTextarea 
                     label="Story (Paragraph 2)"
                     value={localAbout.story[1]}
-                    onChange={(e: any) => setLocalAbout({...localAbout, story: [localAbout.story[0], e.target.value]})}
+                    onChange={(e: any) => handleFieldChange(setLocalAbout, {...localAbout, story: [localAbout.story[0], e.target.value]})}
                 />
                 <AdminTextarea 
                     label="Mission"
                     value={localAbout.mission}
-                    onChange={(e: any) => setLocalAbout({...localAbout, mission: e.target.value})}
+                    onChange={(e: any) => handleFieldChange(setLocalAbout, {...localAbout, mission: e.target.value})}
                 />
                 <AdminTextarea 
                     label="Vision"
                     value={localAbout.vision}
-                    onChange={(e: any) => setLocalAbout({...localAbout, vision: e.target.value})}
+                    onChange={(e: any) => handleFieldChange(setLocalAbout, {...localAbout, vision: e.target.value})}
                 />
                 <h3 className="text-xl font-serif text-brand-burgundy mt-8 mb-4 border-t pt-4">Core Values</h3>
                 {localAbout.coreValues.map((value, index) => (
@@ -404,37 +449,37 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                 <AdminInput 
                     label="Phone Number"
                     value={localContactInfo.phone}
-                    onChange={(e: any) => setLocalContactInfo({...localContactInfo, phone: e.target.value})}
+                    onChange={(e: any) => handleFieldChange(setLocalContactInfo, {...localContactInfo, phone: e.target.value})}
                 />
                 <AdminInput 
                     label="Email Address"
                     value={localContactInfo.email}
-                    onChange={(e: any) => setLocalContactInfo({...localContactInfo, email: e.target.value})}
+                    onChange={(e: any) => handleFieldChange(setLocalContactInfo, {...localContactInfo, email: e.target.value})}
                 />
                  <AdminInput 
                     label="Address / Service Area"
                     value={localContactInfo.address}
-                    onChange={(e: any) => setLocalContactInfo({...localContactInfo, address: e.target.value})}
+                    onChange={(e: any) => handleFieldChange(setLocalContactInfo, {...localContactInfo, address: e.target.value})}
                 />
                 <AdminInput 
                     label="Street Address"
                     value={localContactInfo.street}
-                    onChange={(e: any) => setLocalContactInfo({...localContactInfo, street: e.target.value})}
+                    onChange={(e: any) => handleFieldChange(setLocalContactInfo, {...localContactInfo, street: e.target.value})}
                 />
                 <AdminInput 
                     label="City"
                     value={localContactInfo.city}
-                    onChange={(e: any) => setLocalContactInfo({...localContactInfo, city: e.target.value})}
+                    onChange={(e: any) => handleFieldChange(setLocalContactInfo, {...localContactInfo, city: e.target.value})}
                 />
                 <AdminInput 
                     label="State"
                     value={localContactInfo.state}
-                    onChange={(e: any) => setLocalContactInfo({...localContactInfo, state: e.target.value})}
+                    onChange={(e: any) => handleFieldChange(setLocalContactInfo, {...localContactInfo, state: e.target.value})}
                 />
                 <AdminInput 
                     label="Zip Code"
                     value={localContactInfo.zipcode}
-                    onChange={(e: any) => setLocalContactInfo({...localContactInfo, zipcode: e.target.value})}
+                    onChange={(e: any) => handleFieldChange(setLocalContactInfo, {...localContactInfo, zipcode: e.target.value})}
                 />
                 
                 <h3 className="text-xl font-serif text-brand-burgundy mt-8 mb-4 border-t pt-4">Social Media Links</h3>
@@ -453,11 +498,16 @@ const AdminPage: React.FC<AdminPageProps> = (props) => {
                 <button 
                     type="button"
                     onClick={handleSaveAll}
-                    className="bg-brand-burgundy text-white font-bold py-4 px-8 rounded-full shadow-2xl hover:bg-brand-rose-gold transition-all transform hover:scale-105 flex items-center gap-3 border-2 border-white"
+                    disabled={saveStatus === 'saved'}
+                    className={`
+                        font-bold py-4 px-8 rounded-full shadow-2xl transition-all transform hover:scale-105 flex items-center gap-3 border-2 border-white
+                        ${saveStatus === 'saved' ? 'bg-green-600 hover:bg-green-700' : 'bg-brand-burgundy hover:bg-brand-rose-gold'}
+                        text-white
+                    `}
                     aria-label="Save All Changes"
                 >
-                    <Save size={24} />
-                    Save All Changes
+                    {saveStatus === 'saved' ? <Check size={24} /> : <Save size={24} />}
+                    {saveStatus === 'saved' ? 'Saved!' : 'Save All Changes'}
                 </button>
             </div>
 
